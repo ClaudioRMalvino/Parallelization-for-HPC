@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     MPI_Send(&v, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
   } else if (rank == size - 1) {
     MPI_Recv(&v, 1, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, &status);
-    std::cout << "Status of rank " << rank << ": " << status.MPI_SOURCE << '\n';
+    std::cout << "Status of rank " << rank << ": " << '\n';
     v += rank;
     std::cout << "v = " << v << std::endl;
 
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
   } else {
     MPI_Recv(&v, 1, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, &status);
-    std::cout << "Status of rank " << rank << ": " << status.MPI_SOURCE << '\n';
+    std::cout << "Status of rank " << rank << ": " << '\n';
     v += rank;
     std::cout << "v = " << v << std::endl;
 
