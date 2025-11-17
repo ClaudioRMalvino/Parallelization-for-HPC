@@ -66,19 +66,19 @@ MPI C++ programs are compiled using the `mpic++` wrapper, which automatically li
 
 ```bash
 # Example for Practical 1
-mpic++ -std=c++11 -o helloworld Practical_1/helloworld.cpp
+mpic++ Practical_1/helloworld.cpp -o helloworld 
 
 # Example for Practical 2
-mpic++ -std=c++11 -o sendReceive Practical_2/sendReceive.cpp
+mpic++ Practical_2/sendReceive.cpp -o sendReceive 
 ```
 
 ### Execution
 
-MPI programs are executed using `mpirun` (or `mpiexec`), which launches the specified number of parallel processes.
+MPI programs are executed using `mpiexec` (or `mpirun`), which launches the specified number of parallel processes.
 
 ```bash
 # Example: Run 'helloworld' with 4 parallel processes
-mpirun -np 4 ./helloworld
+mpiexec -n 4 ./helloworld
 
 # Example Output:
 # Hello parallel world, I am process 1 out of 4
@@ -87,7 +87,7 @@ mpirun -np 4 ./helloworld
 # Hello parallel world, I am process 2 out of 4
 
 # Example: Run 'sendReceive' with 8 parallel processes
-mpirun -np 8 ./sendReceive
+mpiexec -n 8 ./sendReceive
 
 # Example Output:
 # Status of rank 1: 
