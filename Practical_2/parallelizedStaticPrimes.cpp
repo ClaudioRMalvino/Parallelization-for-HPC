@@ -18,8 +18,8 @@ int main(int argc, char *argv[]) {
 
   long maxPrime{10000000};
 
-  long localStart = maxPrime * rank / size;
-  long localEnd = maxPrime * (rank + 1) / size;
+  int localStart = static_cast<int>(maxPrime * rank / size);
+  int localEnd = static_cast<int>(maxPrime * (rank + 1) / size);
   std::vector<int> primes;
 
   if (rank == (size - 1)) {
@@ -28,8 +28,8 @@ int main(int argc, char *argv[]) {
 
   int primeNum{0};
 
-  for (long i = localStart; i < localEnd; i++) {
-    primeNum = isPrime(i);
+  for (int i = localStart; i < localEnd; i++) {
+    int primeNum = isPrime(i);
     if (primeNum == 0) {
       continue;
     } else {
@@ -43,7 +43,6 @@ int main(int argc, char *argv[]) {
 
     for (int process = 1; process < size; process++) {
       int incomingCount;
-      // MPI_Probe(process, 0, MPI_COMM_WORLD, &status);
       MPI_Probe(process, 0, MPI_COMM_WORLD, &status);
       MPI_Get_count(&status, MPI_INT, &incomingCount);
       std::vector<int> recvBuffer(incomingCount);
