@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="411b26e9-7425-4b1e-a5cf-e0adc0208a7c" name="Cerberus1">
+        <fileTransfer rootFolder="/lsc/zeushome/crm98" accessType="SFTP" host="cerberus1.lsc.phy.private.cam.ac.uk" port="22" sshConfigId="f244e924-ba8f-4e59-bbe8-5371f305e5a1" sshConfig="crm98@cerberus1.lsc.phy.private.cam.ac.uk:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

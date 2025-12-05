@@ -5,7 +5,6 @@
 #include <mpi.h>
 #include "quadrature.h"
 
-double percentError(const double trueVal, const double expVal);
 
 int main(int argc, char *argv[]) {
 
@@ -15,8 +14,6 @@ int main(int argc, char *argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    double startTime = MPI_Wtime();
-
     const double gsteps{std::stod(argv[1])};
     double total{0.0};
     const int start = static_cast<int>(gsteps) * rank / size;
@@ -24,16 +21,13 @@ int main(int argc, char *argv[]) {
 
     total = gaussianQuadrature(start, end, gsteps);
 
-    double endTime = MPI_Wtime();
-    double elapsedTime = endTime - startTime;
-
     if (rank == 0) {
-        double trueVal{0.8862269255};
         double rbuffer[size];
-        double globalTotal{0.0};
+        double globalTotal{total};
 
-        MPI_Gather(&total, 1, MPI_DOUBLE, rbuffer, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
+        for (int i = 1; i < size; i++) {
+            MPI_Recv(&rbuffer, 1, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        }
         for (double partial : rbuffer) {
             globalTotal += partial;
         }
@@ -41,13 +35,10 @@ int main(int argc, char *argv[]) {
         std::cout << std::fixed << std::setprecision(10) << globalTotal << '\n';
 
     } else {
-        MPI_Gather(&total, 1, MPI_DOUBLE, NULL, 0, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        MPI_Send(&total, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+        std::cout << rank << " sent out packet" << std::endl;
     }
 
     MPI_Finalize();
     return 0;
-}
-
-double percentError(const double trueVal, const double expVal) {
-    return std::abs(trueVal - expVal) / trueVal * 100;
 }
