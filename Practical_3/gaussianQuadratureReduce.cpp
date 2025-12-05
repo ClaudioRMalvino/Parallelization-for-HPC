@@ -1,9 +1,11 @@
 #include <cmath>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <mpi.h>
+#include "quadrature.h"
 
-double gaussianQuadrature(int startSteps, int endSteps, double globalSteps);
+double percentError(const double trueVal, const double expVal);
 
 int main(int argc, char *argv[]) {
 
@@ -11,28 +13,36 @@ int main(int argc, char *argv[]) {
   int rank, size;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &size);
+  double startTime = MPI_Wtime();
 
   const double gsteps{std::stod(argv[1])};
   double total{0.0};
   double globalTotal;
-  const int start = 10 * rank / size;
-  const int end = 10 * (rank + 1) / size;
-  total = gaussianQuadrature( start, end, gsteps);
+  const int start = static_cast<int>(gsteps) * rank / size;
+  const int end = static_cast<int>(gsteps) * (rank + 1) / size;
+
+  total = gaussianQuadrature(start, end, gsteps);
+
   MPI_Reduce(&total, &globalTotal, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+  double endTime = MPI_Wtime();
+  double elapsedTime = endTime - startTime;
+
   if (rank == 0) {
+    double trueVal{0.8862269255};
+
+    std::ofstream runTimeFile("runTimevsProcessors.txt", std::ios::app);
+    std::ofstream resultFile("resultvsProcessors.txt", std::ios::app);
+    runTimeFile << size << " " << elapsedTime << '\n';
+    resultFile << size << " " << percentError(trueVal, globalTotal) << '\n';
     std::cout << std::fixed << std::setprecision(10) << globalTotal << '\n';
+
   }
 
   MPI_Finalize();
   return 0;
 }
 
-double gaussianQuadrature(const int startSteps, const int endSteps, const double globalSteps) {
-  double total = 0.0;
-
-  for (int i = startSteps; i < endSteps; i++) {
-    total += std::exp(
-        -std::pow(10.0 * ((static_cast<double>(i) + 0.5) / (globalSteps + 1)), 2));
-  }
-  return total;
+double percentError(const double trueVal, const double expVal) {
+  return std::abs(trueVal - expVal) / trueVal * 100;
 }
