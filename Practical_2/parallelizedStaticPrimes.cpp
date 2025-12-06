@@ -1,4 +1,4 @@
-#include <cmath>
+#include "primes.h"
 #include <iostream>
 #include <mpi.h>
 #include <vector>
@@ -55,25 +55,4 @@ int main(int argc, char *argv[]) {
 
   MPI_Finalize();
   return 0;
-}
-
-int isPrime(long num) {
-
-  long sqNum = std::sqrt(num);
-  if (num == 1) {
-    return 0;
-  }
-  if (num == 2) {
-    return num;
-  }
-  if (num % 2 == 0) {
-    return 0;
-  }
-
-  for (long i = 3; i <= sqNum; i += 2) {
-    if (num % i == 0) {
-      return 0;
-    }
-  }
-  return num;
 }
