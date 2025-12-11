@@ -7,7 +7,6 @@
 
 
 int main(int argc, char *argv[]) {
-
     MPI_Init(&argc, &argv);
 
     int rank, size;
@@ -28,12 +27,11 @@ int main(int argc, char *argv[]) {
         for (int i = 1; i < size; i++) {
             MPI_Recv(&rbuffer, 1, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
-        for (double partial : rbuffer) {
+        for (double partial: rbuffer) {
             globalTotal += partial;
         }
 
         std::cout << std::fixed << std::setprecision(10) << globalTotal << '\n';
-
     } else {
         MPI_Send(&total, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
         std::cout << rank << " sent out packet" << std::endl;

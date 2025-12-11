@@ -8,7 +8,6 @@
 double percentError(const double trueVal, const double expVal);
 
 int main(int argc, char *argv[]) {
-
     MPI_Init(&argc, &argv);
 
     int rank, size;
@@ -34,12 +33,11 @@ int main(int argc, char *argv[]) {
 
         MPI_Gather(&total, 1, MPI_DOUBLE, rbuffer, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-        for (double partial : rbuffer) {
+        for (double partial: rbuffer) {
             globalTotal += partial;
         }
 
         std::cout << std::fixed << std::setprecision(10) << globalTotal << '\n';
-
     } else {
         MPI_Gather(&total, 1, MPI_DOUBLE, NULL, 0, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     }

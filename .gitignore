@@ -2,3 +2,7 @@
 *.txt
 MPI_2025/
 Lecture_snippets/
+*.clangd
+.clangd
+*.clang-format
+.clang-format
