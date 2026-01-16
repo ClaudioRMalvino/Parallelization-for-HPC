@@ -31,7 +31,6 @@ int main() {
             std::cout << '\n';
         }
         // Scatter size one N times, shifting the scattering window by size after each scatter
-        // appends the
         for (size_t i{}; i < sizeT; i++) {
             MPI_Scatter(
                 matrix.data() + (sizeT * i),

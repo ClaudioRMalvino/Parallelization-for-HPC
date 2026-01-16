@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
   const long double countD {static_cast<long double>(count)};
   const long double hitD {static_cast<long double>(hit)};
   const long double result {(hitD / countD)};
+
   if (rank == 0) {
     MPI_Reduce(&result, &globalResult, 1, MPI_LONG_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     std::cout << std::fixed << std::setprecision(16);
